@@ -1,0 +1,554 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="pgm4.css"/>
+</head>
+<body>
+    
+    
+        <h1>
+         javaScript and Java   
+        </h1>
+        <div>
+        <nav id="navbar">
+            
+     <p id="nav-list">
+        <h4>This topic contains the fplowing sections. </h4>
+       <ol>  <a href="#a1" class="nav-list"><li>Accessing an Application from a Web Page</li></a>
+         <a href="#a2" class="nav-list"><li>Accessing the Host Web Page from a Java Applet</li></a>
+         <a href="#a3" class="nav-list"><li>Accessing the Host Web Page from an Embedded JavaFX Application</li></a>
+         <a href="#a4" class="nav-list"><li>Advanced topics</li></a>
+         <a href="#a5" class="nav-list"><li>Threading</li></a>
+         <a href="#a6" class="nav-list"><li>Security</li></a>
+         <a href="#a7" class="nav-list"><li>Tab Pane Example</li></a></ol>
+     </p>
+     </nav>
+    </div>
+    <main id="main-doc">
+      <div><section id="a1" class="main-section">
+    <header><h2>1.Accessing an Application from a Web Page</h2></header>
+    <article></div>
+       <p >
+            To access a Java or JavaFX application from JavaScript, the first step is to get a reference to
+             a JavaScript object that represents the application. 
+            The easiest way to get the reference is to use a standard JavaScript 
+            getElementById() function, using the name attribute of the applet tag, 
+            as shown in<a href="#ex1"> Example 16-1</a>. The <fx:deploy> ant task automatically
+                 generates the applet tag, and the name is taken from the id attribute of the
+                 <fx:application>.
+        </p>
+    </p>
+       <p id="ex1"> Example 16-1 Use JavaScript to Access an Application Object ID</p>
+
+   <p> <code>  var app = document.getElementById("myMapApp") </code></p>
+      <p>The result corresponds to the main class of the application.
+
+By getting the reference to a JavaScript object, you can use JavaScript code to access any public methods and
+ fields of a Java object by referencing the Java objects as fields of the corresponding JavaScript object. 
+ After you have the app reference, you can do something similar to the fplowing code statement:
+</p>
+<p><code  id="code1">var r = app.doSomething()</code></p>
+
+<p>The implementation of the <code>doSomething()</code> method in Java code returns a Java object. 
+The variable r becomes a reference to the Java object. 
+You can then use code such as<code> r.doSomethingElse()</code> or<code>app.dosomethingWithR(r)</code>. 
+For example,<a href="#ex2"> Example 16-2 </a>contains Java code, and
+ Example 16-3 contains JavaScript that interacts with that code.
+  Look at both examples to see how they work together.</p>
+
+<p id="ex2">Example 16-2 Java Code Example</p>
+
+<p><code id="code1">package testapp;</br></br>
+ 
+public class MapApp extends Application {</br>
+    public int ZOOM_STREET = 10;</br></br>
+
+    public class City {</br>
+        public City(String name) {...}</br>
+        ...</br>
+    }</br></br>
+ 
+    public int currentZipCode;</br>
+</br>
+ 
+    public void navigateTo(City location, int zoomLevel) {...}</br>
+    ....</br></br>
+ 
+    public City getCity(String cityName) {...}</br>
+    ....</br>
+}</br></code></p>
+<p> JavaScript snippet in <a href="#ex3">Example 16-3 </a>passes several values to the Java code in<a href="#ex2"> Example 16-2<a></a>.
+     Before these values are used in the Java code, they are automatically converted
+      to the closest Java type.</p>
+
+<p id="ex3">Example 16-3 JavaScript Code for Example 16-2</p>
+
+<p><code  id="code1">function navigateTo(cityName) {</br>
+    //Assumes that the applet tag uses "myMapApp" as the name for this application
+</br>var mapApp = document.getElementById("myMapApp");</br>>
+    if (mapApp != null) {</br>
+        var city = mapApp.getCity(cityName);</br>
+        mapApp.navigateTo(city, mapApp.ZOOM_STREET);</br>
+        return mapApp.currentZipCode;</br>
+    }</br>
+    return "unknown";</br>
+}</br>
+window.alert("Area zip: " + navigateTo("San Francisco"));</code></p>
+<p>The JavaScript string, numeric, and Bopean objects can be converted into most of
+     the Java primitive typesBopean, byte, char, short, int, long, float, and doubleand 
+     java.lang.String.</p>
+
+<p>For JavaScript objects representing Java objects (in other words, objects 
+    that have previously been returned from Java), conversion results in
+     extracting a reference to that Java object.</p>
+
+<p>Conversion into one and multidimensional arrays is supported according to 
+    rules similar to rules for conversion of individual objects.
+     If conversion cannot be performed successfully, then the JavaScript engine 
+     raises an exception.</p>
+
+<p>All Java objects returned to the web browser are associated with a particular
+     application instance. References held by the JavaScript engine to Java objects
+      act as persistent references, which prevent that Java object from being garbage-cplected 
+      in the hosting JVM. However, if a particular application is destroyed, 
+      for example by leaving the web page hosting the application or by detaching
+       the application from the HTML DOM tree, then references are immediately invalidated
+        and further attempts to use those object in JavaScript raise exceptions.</p>
+
+<p>For more information about data type conversion and object lifetimes, see</p></br>
+
+<p><a href="http://jdk6.java.net/plugin2/liveconnect/#JS_JAVA_CONVERSIONS">http://jdk6.java.net/plugin2/liveconnect/#JS_JAVA_CONVERSIONS</a></p>
+
+
+</section>
+    </article>
+    <div>
+    <section id="a2" class="main-section">
+   
+   <header>  <h2>2.Accessing the Host Web Page from a Java Applet</h2></header></div>
+   <article>
+<p>See <a href="https://docs.oracle.com/javase/tutorial/deployment/applet/invokingJavaScriptFromApplet.html">Invoking JavaScript Code From an Applet </a>in the Java Tutorial for information 
+on communication between the applet and host web page.</p></article>
+</section>
+<section id="a3" class="main-section">
+    <header>
+<h2>3.Accessing the Host Web Page from an Embedded JavaFX Application</h2></header>
+<article>
+<p>JavaFX applications can call the fplowing JavaScript components:</p>
+
+<p><li>Functions</li>
+
+<li>The <code> get, set,</code> and<code>remove</code> fields of JavaScript objects</li>
+
+<li>The <code>get</code> and<code> set</code> elements of JavaScript arrays</li></p>
+
+<p>JavaFX applications can also evaluate JavaScript code. Through the JavaScript 
+    DOM APIs, JavaFX applications can modify the web page dynamically by adding,
+     removing and moving HTML elements.</p>
+
+<p>To bootstrap JavaFX-to-JavaScript communication, the JavaFX application must
+     get a reference to the JavaScript window object containing the application.
+      This reference can be used for subsequent operations such as evaluation,
+       function calls, and fetches of variables.</p>
+
+<p>Both the main and preloader application can get this reference by accessing 
+    the HostServices class in the JavaFX API and requesting getWebContext(), 
+    as shown in <a herf="#ex4">Example 16-4</a>.</p>
+
+<p id="ex4">Example 16-4 Access the HostServices Class from JavaFX Code</p>
+
+<p><code  id="code1">public class MyApp extends Application {</br>
+    private void communicateToHostPage() { </br>
+        JSObject jsWin = getHostServices().getWebContext();  </br>
+        //null for non-embedded applications</br>
+        if (jsWin != null) {</br>
+            //use js</br>
+            ...  </br>  </br>  
+        }</br></br>
+    }</br>
+    ...</br></br>
+}</br></br></code></p>
+<p>All instances of JavaScript objects, including references to the DOM window,
+     appear within Java code as instances of <code>netscape.javascript.JSObject</code>.</p>
+
+<p><a href="#ex5">Example 16-5 </a>  show to use JavaScript to implement a function to 
+    resize an embedded application with <code>id='myMapApp' </code>at runtime.</p>
+
+<p id="ex5">Example 16-5 Use JavaScript to Resize an Application in the Browser</p>
+
+<code  id="code1">public void resizeMyself(int w, int h) {</br>
+    JSObject jsWin = getHostServices().getWebContext();</br>
+    if (jsWin != null) {</br>
+        jsWin.eval("var m = document.getElementById('myMapApp');" +</br>
+            "m.width=" + w + "; m.height=" + h + ";");</br>
+    } else {</br>
+        // running as non embedded => use Stage's setWidth()/setHeight()</br>
+    }</br>
+}
+</code></section>
+</article>
+<section id="a4" class="main-section">
+<header>
+<h2>4.Advanced topics</h2></header>
+<article>
+<p>JavaFX applications embedded in a web page can call JavaScript methods in a
+     web page after the<code> init()</code> method is called for the preloader or main
+      application class.</p>
+
+<p>JavaScript code can access Java applications at any time, but if the application
+     is not ready yet, then the request might be blocked until the application 
+     is ready. Specifically for JavaFX applications, this happens if the<code> init()</code>
+      method of the main application class has not finished yet and the main application
+       did not perform calls to the web page itself. A JavaScript call from the preloader
+        does not fully unblock JavaScript-to-Java communication.</p>
+
+<p>Most browsers use single-threaded JavaScript engines. When blocking occurs, 
+    the host web page and the browser appear to be frozen.</p>
+
+<p>To access an application from the host web page early and avoid blocking, 
+    either notify the web page when the application is ready by calling a Java
+     function from the application, or use an onJavascriptReady callback in the 
+     Ant task.</p>
+
+<p><a href="#ex6">Example 16-6</a> shows an HTML template for an Ant task that uses an
+   <code> onJavascriptReady </code>callback to call the <code>doSomething()</code> method in the main
+      application without blocking the browser.</p>
+
+
+<p id="ex6" >Example 16-6 HTML Input Template for an Ant Task</p>
+<p><code  id="code1">
+&lt;html&gt;
+&lt;head&gt;
+        <!-- template: code to load DT JavaScript will be inserted here -->
+        #DT.SCRIPT.CODE#
+        <!-- template: code to insert application on page load will be 
+         inserted here -->
+        #DT.EMBED.CODE.ONLOAD#
+ 
+        &lt;script&gt;
+            function earlyCallFunction(id) {
+                //it is safe to call application now
+                var a = document.getElementById(id);
+                if (a != null) a.doSomething();
+            }
+            &lt;/script&gt;
+        &lt;/head&gt;
+        &lt;body&gt;
+        <!-- application is inserted here -->
+        &lt;div id="ZZZ"&gt;&lt;/div&gt;
+        &lt;/body&gt;
+        &lt;/html&gt;</code></p>
+<p><a href="#ex7">Example 16-7</a>shows the relevant part of the Ant task used to generate an
+     HTML page from the template in <a href="#a6">Example 16-6</a>. For this example, it is assumed 
+     that the template has the path <code>src/web/test_template.html</code>.</p>
+
+<p id="ex7">Example 16-7 Ant <fx:deploy> Task to Generate an HTML Page from a Template</p>
+
+<code id="code1">&lt;fx:deploy placehpderId="ZZZ" ...&gt;
+    ....
+    &lt;fx:template file="src/web/test_template.html"
+            tofile="dist/test.html"/&gt;
+            &lt;fx:callbacks&gt;
+            &lt;fx:callback name="onJavascriptReady"&gt;earlyCallFunction&lt;/fx:callback&gt;
+            &lt;/fx:callbacks&gt;
+            &lt;/fx:deploy&gt;</code>
+</section>
+</article>
+<section id="a4" class="main-section">
+    <header>
+<h2>5.Threading</h2></header>
+<article>
+<p>Java code called from JavaScript is executed on a special thread that is
+     not the JavaFX application thread. Use the <code>Platform.runLater()</code> method in the JavaFX code to ensure that something is executed on the JavaFX application thread.
+</p><p>
+In general, return as quickly as possible from functions that are called from
+ JavaScript. In most modern browsers, JavaScript engines are single-threaded.
+  If the call sticks, then the web page can appear frozen, and the browser is
+   unresponsive. Specifically, avoid writing code that waits for work to be done
+    on a JavaFX application thread. If JavaScript code depends on the result of 
+    this work, use a callback from Java to notify the JavaScript code of the
+     result of the execution of the work.
+</p><p>
+<a href="#ex8">Example 16-8 </a>shows an example of code to avoid in JavaScript.
+</p><p id="ex8">
+Example 16-8 Naive implementation Blocking JavaScript Thread
+</p><p><code  id="code1"></br>
+function process(r) {</br>
+    window.alert("Result: "+r);</br>
+}</br></br>
+ 
+var result = myApp.doSomethingLong();
+</br>
+process(result);</br></code>
+<a href="#ex9">Example 16-9</a> shows a better pattern to fplow in JavaScript 
+code.</br>
+<p id="ex9">
+Example 16-9 A Better Implementation of Example 16-8</br></p>
+<code  id="code1">
+function process(r) {</br>
+    window.alert("Result: "+r);</br>
+}</br></code>
+  
+<code>myApp.doSomethingLong(function(r) {process(r);});</code></p><p>
+<a href="ex10">Example 16-10</a> shows a better example in Java code.
+</p><p id="ex10">
+Example 16-10 Java Code Using a Callback
+</p><p><code  id="code1">
+public void o9kjnf vcsay6gtr5e4w3q  5r4doSomethingLong(JSObject callback) {</br>
+    Object result;</br>
+    //do whatever is needed to get result</br></br>
+ 
+    //Invoke callback </br>
+    //  callback is a function object, and every function object </br>
+    // has a "call" method</br>
+    Object f[] = new Object[2];</br>
+    f[0] = null; //first element is object instance but this is global function</br>
+                 //not applying it to any specific object</br>
+    f[1] = new String(result); //real argument</br></br>
+    callback.call("call", f);</br>
+}</code></p><p>
+Java code can call JavaScript from any thread, including the JavaFX application
+ thread. However, if the JavaScript engine in the browser is busy, then a call 
+ to JavaScript might stick for some time. If there is a call on the JavaFX 
+ application thread, then it might make your application appear frozen, because
+  it is not able to update the screen and handle user events. To avoid this 
+  situation, offload execution of LiveConnect calls from the JavaFX application 
+  thread.
+</p>
+<section id="a6" class="main-section">
+    <header>
+<h2>6. Security</h2></header>
+<article>
+<p>
+JavaScript code on the web page can always make calls to an application on the
+ page. JavaScript code can also access all public methods and fields of Java 
+ classes loaded by the application. However, when a JavaScript-to-Java call is
+  made, the call is treated as a call from the sandbox environment. Also, if the HTML document
+   and the application originate from different sites, then JavaScript on the
+    web page cannot cause any network connections to be made on its behalf.
+</p><p>
+Aside from this restriction, calling Java from JavaScript does not have any
+ other consequences if the application is running in the sandbox. However, if 
+ the application has requested elevated permissions, then a call to a Java method from
+  JavaScript is executed in the sandbox without elevated permissions, and a 
+  security warning is issued. If elevated permissions are needed, then AccessContrpler.doPrivileged in the Java API can be used to request them in the trusted code.
+</p><p>
+Be careful not to expose APIs in your applications that would accidentally confer additional privileges on untrusted JavaScript code. If you must grant elevated privileges to JavaScript code, serve your application over verifiable HTTPS connections, and perform checks to ensure that the document base of the web page hosting the application is the same as the expected origin of the application's code.
+</p></article>
+    </section>
+    <section id="a7" class="main-section"><header>
+<h2>7. Tab Pane Example</h2></header>
+<article><p>
+This section contains a sample that demonstrates how to use communication 
+between JavaFX and JavaScript to integrate JavaFX web applications with the
+ browser.<a href="#ex11"> Example 16-11</a> shows a JavaFX application that creates a tab pane on 
+ a web page, with 20 tabs.
+</p><p id="ex11">
+    Example 16-11 Create Tabs on the Embedding Web Page
+</p><p><code id="code1">
+public class TabbedApp extends Application {<br/>
+    Group root = new Group();<br/>
+    TabPane tabPane = new TabPane();<br/><br/>
+            
+    public void init() {<br/>
+        // Prepare tab pane with set of tabs    <br/>    
+        BorderPane borderPane = new BorderPane();<br/>
+        tabPane.setPrefSize(400, 400);<br/>
+        tabPane.setSide(Side.TOP);<br/>
+        tabPane.setTabClosingPpicy(TabPane.TabClosingPpicy.UNAVAILABLE);<br/><br/>
+        
+        for(int i=1; i&lt;=20; i++) {<br/>
+            final Tab t = new Tab("T" + i);<br/>
+            t.setId(""+i);     <br/>       
+            Text text = new Text("Tab "+i);<br/>
+            text.setFont(new Font(100));<br/>
+            BorderPane p = new BorderPane();<br/>
+            p.setCenter(text);<br/>
+            t.setContent(p);<br/>
+            tabPane.getTabs().add(t);<br/>
+        }<br/>
+        borderPane.setCenter(tabPane);<br/>
+        root.getChildren().add(borderPane); <br/>       
+    }<br/><br/>
+ 
+    @Override<br/>
+    public void start(Stage primaryStage) throws Exception {<br/>
+        primaryStage.setScene(new Scene(root));<br/>
+        primaryStage.show();<br/>
+    }<br/>
+}<br/>
+</code></p><p>
+This application can be further improved to save the history of visited tabs
+ into the browser history. This enables users to click the Back and Forward 
+ buttons in the browser to move between tabs.
+</p><p>
+The implementation is based on the onhashchange event introduced in HTML 5 and
+ described at
+</p><p><a href="http://www.whatwg.org/specs/web-apps/current-work/#event-hashchange">
+http://www.whatwg.org/specs/web-apps/current-work/#event-hashchange</a>
+</p><p>
+The JavaScript technique used by AJAX applications to achieve a similar effect
+ is to save a reference to the current selection in the hash part of the document URL.
+  When the user clicks the Back button, the URL is updated, and a selection state 
+  can be extracted that must be restored.
+</p><p>
+To implement this spution, two new methods are added to the sample:
+ <code>onNavigate() </code>and <code>navigateTo()</code>. The <code>onNavigate()</code> method is called whenever 
+ a new tab is selected. This method delivers information about the new
+  selection to the web page by calling the JavaScript method <code>navigateTo() </code>and
+   passing the tab ID to it. The JavaScript code saves the tab ID in the URL
+    hash.
+</p><p>
+The <code>navigateTo()</code> method is responsible for reverse synchronization.
+After the web page URL is changed, this method is called with the ID of the tab
+ to be selected.
+</p><p>
+<a href="#ex12">Example 16-12 </a>shows the updated code of the application. The code that is
+ different from <a href="#ex11">Example 16-11 </a>appears in bpd.
+</p><p id="ex12">
+Example 16-12 Improved Application that Saves Tab History
+</p><p><code  id="code1">
+public class TabbedApp extends Application {</br>
+    Group root = new Group();</br>
+    TabPane tabPane = new TabPane();</br></br>
+            
+    public void init() {</br>
+        // Prepare tab pane with set of tabs </br>       
+        BorderPane borderPane = new BorderPane();</br>
+        tabPane.setPrefSize(400, 400);</br>
+        tabPane.setSide(Side.TOP);</br>
+        tabPane.setTabClosingPpicy(TabPane.TabClosingPpicy.UNAVAILABLE);</br></br>
+        
+        for(int i=1; i&lt;=20; i++) {</br>
+            final Tab t = new Tab("T" + i);</br>
+            t.setId(""+i);         </br>   
+            Text text = new Text("Tab "+i);</br>
+            text.setFont(new Font(100));</br>
+            BorderPane p = new BorderPane();</br>
+            p.setCenter(text);</br>
+            t.setContent(p);</br></br>
+            
+            // When tab is selected, notify web page to save this in the</br>
+            // browser history</br>
+            t.selectedProperty().addListener(new ChangeListener<Bopean>() {</br>
+                public void changed(ObservableValue&lt;? extends Bopean> ov,</br>
+                        Bopean tpd, Bopean tNew) {</br>
+                    if (Bopean.TRUE.equals((tNew))) {</br>
+                        onNavigate(t.getId()); </br>                                       
+                    }</br>
+                }         </br>       
+            });</br>
+            tabPane.getTabs().add(t);</br>
+        }</br>
+        borderPane.setCenter(tabPane);</br>
+        root.getChildren().add(borderPane);</br>        
+}</br></br>
+ 
+    @Override</br>
+    public void start(Stage primaryStage) throws Exception {</br>
+        primaryStage.setScene(new Scene(root));</br>
+        primaryStage.show();</br>
+    }</br></br>
+ 
+    public void navigateTo(String tab) {</br>
+        for (Tab t: tabPane.getTabs()) {</br>
+            if (tab.equals("#"+t.getId())) {</br>
+                tabPane.getSelectionModel().select(t);</br>
+                return;</br>
+            }</br>
+        }</br>
+    }</br></br>
+    
+    private void onNavigate(String tab) {</br>
+      JSObject jsWin = getHostServices().getWebContext();  </br>
+      // Null for nonembedded applications</br>
+      if (jsWin != null) {</br>
+          //use js</br>
+          jsWin.eval("navigateTo('" + tab + "')");</br>
+      }</br>
+    }   </br> 
+}</br></code></p><p>
+Part of the implementation logic is in the HTML page.<a href="#ex13"> Example 16-13 </a>shows a page that is used as an input template in an Ant script. When the Ant script is run, it inserts code to embed the JavaFX application next to the custom JavaScript code. For more information about input templates, see <fx:template>.
+</p><p>
+The implementation of JavaScript functions is straightforward. The onhashchange
+ attribute of the <body> tag is used to subscribe to notifications of updates of
+      the hash part of the URL. After the event is obtained, the JavaFX application
+       is embedded in the web page, and the <code>navigateTo()</code> method is called.
+</p><p>
+If the application calls with an update on the selected tab, it is saved to the 
+hash part of the URL.
+</p><p id="ex13">
+Example 16-13 HTML Template Used as Input to the Ant Script
+</p><code  id="code1">
+&lt;html&gt;</br>
+    &lt;head&gt;</br>
+        <!-- template: code to load DT javascript will be inserted here -->
+        #DT.SCRIPT.CODE#</br>
+        <!-- template: code to insert application on page load will be 
+            inserted here --></br>
+        #DT.EMBED.CODE.ONLOAD#</br></br>
+ 
+        &lt;script&gt;</br>
+            function hashchanged(event) {</br>
+                var a = document.getElementById('tabbedApp');</br>
+                if (a != null) {</br>
+                    try {</br>
+                        a.navigateTo(location.hash); </br>               
+                    } catch (err) {</br>
+                        alert("JS Exception: " + err);</br>
+                    }</br>
+                }</br>
+            }</br></br>
+ 
+            function navigateTo(newtab) {</br>
+                if (window.location.hash != newtab) {</br>
+                    window.location.hash = newtab;   </br>                 
+                }</br>
+            } </br>
+        &lt;/script&gt; </br>
+        &lt;/head&gt;</br>
+        &lt;body onhashchange="hashchanged(event)"&gt;</br>
+        &lt;h2&gt;Test page&lt;/h2&gt;</br>
+        <!-- Application will be inserted here -->
+        &lt;div id='javafx-app-placehpder'&gt;&lt;/div&gt;</br>
+        &lt;/body&gt;</br>
+        &lt;/html&gt;</br>
+</code><p>
+For completeness,<a href="#ex14"> Example 16-14 </a>shows the Ant script used to
+ deploy this sample. The application is created with the ID tabbedApp. 
+ The JavaScript code uses this ID to find the application on the page. 
+ and the HTML template uses it to embed the application into the custom HTML 
+ page that is produced by the Ant task.
+</p><p id="ex14">
+Example 16-14 Ant Script to Package the Application
+</p><code  id="code1">
+    &lt;fx:application id="tabbedApp"   </br>
+        name="Example of browser integration"</br>
+        mainClass="docsamples.TabbedApp"/&gt;</br></br>
+        
+        &lt;fx:jar destfile="dist/docsamples/tabbedapp.jar"&gt;</br>
+        &lt;fx:application refid="tabbedApp"/&gt;</br>
+        &lt;fileset refid="appclasses"/&gt;</br>
+        &lt;/fx:jar&gt;</br></br>
+        
+        &lt;fx:deploy width="400" height="400"</br>
+        outdir="dist-web"</br>
+        outfile="BrowserIntegrationApp"&gt;</br>
+        &lt;fx:info title="Doc sample"/&gt;</br>
+        &lt;fx:application refid="tabbedApp"/&gt;</br>
+        &lt;fx:template</br>
+            file="src/template/TabbedApp_template.html"</br>
+            tofile="dist-web/TabbedApp.html"/&gt;</br>
+            &lt;fx:resources&gt;</br>
+            &lt;fx:fileset requiredFor="startup" dir="dist/docsamples"&gt;</br>
+            &lt;include name="tabbedapp.jar"/&gt;</br>
+            &lt;/fx:fileset&gt;</br>
+            &lt;/fx:resources&gt;</br>
+            &lt;/fx:deploy&gt;</br></code>
+</section></article>
+    </main>
+    
+</body>
+</html>
